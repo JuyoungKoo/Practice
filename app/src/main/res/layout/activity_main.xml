@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+    <TextView
+            android:text="Todo List"
+            android:textSize="50dp"
+            android:textColor="@android:color/holo_purple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textView" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" android:id="@+id/linearLayout"
+            android:layout_marginTop="20dp">
+        <CheckBox
+                android:text="안드로이드 공부하기 "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/checkBox"/>
+        <CheckBox
+                android:text="자바스프링 복습하기 "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/checkBox2"/>
+        <CheckBox
+                android:text="맛있는 저녁 먹기 "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/checkBox3"/>
+        <CheckBox
+                android:text="넷플릭스 보기 "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/checkBox4"/>
+    </LinearLayout>
+    <Button
+            android:text="추가"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+            android:text="목표달성율"
+            android:textSize="20dp"
+            android:textColor="@android:color/holo_purple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"/>
+    <TextView
+            android:text="0"
+            android:textSize="20dp"
+            android:textColor="@android:color/holo_purple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/button" android:layout_marginTop="30dp"
+            app:layout_constraintStart_toEndOf="@+id/textView2" android:layout_marginStart="10dp"/>
+    <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/seekBar"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="16dp"
+            app:layout_constraintHorizontal_bias="1.0"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
