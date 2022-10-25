@@ -10,27 +10,23 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.greedy.practice.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    val helper = SqliteHelper(this, "memo", 1)
 
     val listener by lazy {
         CompoundButton.OnCheckedChangeListener{ button, isChecked ->
             if(isChecked){
                 when(button.id){
-                    R.id.checkBox -> Log.d("check", "todo를 완료하였습니다.")
-                    R.id.checkBox2 -> Log.d("check", "todo를 완료하였습니다.")
-                    R.id.checkBox3 -> Log.d("check", "todo를 완료하였습니다.")
-                    R.id.checkBox4 -> Log.d("check", "todo를 완료하였습니다.")
+                    R.id.textContent -> Log.d("check", "todo를 완료하였습니다.")
                 }
             }else{
                 when(button.id){
-                    R.id.checkBox -> Log.d("check", "todo 완료가 취소 되었습니다.")
-                    R.id.checkBox2 -> Log.d("check", "todo 완료가 취소 되었습니다.")
-                    R.id.checkBox3 -> Log.d("check", "todo 완료가 취소 되었습니다.")
-                    R.id.checkBox4 -> Log.d("check", "todo 완료가 취소 되었습니다.")
+                    R.id.textContent -> Log.d("check", "todo 완료가 취소 되었습니다.")
                 }
             }
         }
@@ -41,10 +37,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.checkBox.setOnCheckedChangeListener(listener)
-        binding.checkBox2.setOnCheckedChangeListener(listener)
-        binding.checkBox3.setOnCheckedChangeListener(listener)
-        binding.checkBox4.setOnCheckedChangeListener(listener)
 
         binding.seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -62,27 +54,37 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        val intnet = Intent(this,SubActivity::class.java)
+        val adapter = RecyclerAdapter()
+        adapter.helper = helper
+        /* selectMemo를 통해 DB에 있는 메모를 모두 조회헤서 List 반환 받고
+        * 해당 데이터를 Adapter의 listData에 담는다 */
+        adapter.listData.addAll(helper.selectMemo())
 
-        intent.putExtra("from1", "오늘의 할일!")
-        intent.putExtra("from2",2022)
+        /* main activity의 recyclerView에 생성한 어댑터 연결하고 레이아웃 설정 */
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+
+        /* 메모 저장 버튼 이벤트 */
+        binding.saveButton.setOnClickListener{
+            /* 메모 내용이 입력 된 경우만 동작 */
+            if(binding.editMemo.text.toString().isNotEmpty()){
+                val memo = Memo(null,binding.editMemo.text.toString())
+                helper.insertMemo(memo)
+
+                /* DB가 변동 되었을 때 화면도 변동될 수 있도록 adapter의 data를 수정하고
+                * 데이터가 변화 했음을 알린다. */
+                adapter.listData.clear()
+                adapter.listData.addAll(helper.selectMemo())
+                adapter.notifyDataSetChanged()
+
+                /* 입력란 비우기 */
+                binding.editMemo.setText("")
 
 
-        val resultListener = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            /* result의 resultCode가 RESULT_OK라면 */
-            if(it.resultCode == Activity.RESULT_OK) {
-                /* it.data 자체가 리턴 받은 intent 객체이다.
-                *  returnValue라는 key 값으로 intent에 전달 된 값을 message로 꺼내고 */
-                val message = it.data?.getStringExtra("returnValue")
-                /* MainActivity 위에 짧은 길이로 전달받은 message를 Toast 위젯으로 보여준다. */
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
             }
         }
 
-        /* resultListener를 이용한 subactivity 동작 */
-        binding.btnAdd.setOnClickListener {
-            resultListener.launch(intent)
-        }
+
 
 
 
