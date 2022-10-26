@@ -14,7 +14,7 @@ class SqliteHelper (context: Context, name: String, version: Int) : SQLiteOpenHe
         /* 데이터베이스가 생성될 때 테이블을 생성한다. */
         val create = "create table memo (" +
                 "no integer primary key, " +
-                "content text, " +
+                "content text " +
                 ")"
 
         db?.execSQL(create)
